@@ -1,0 +1,97 @@
+# jobs:
+#   test:
+#     runs-on: Windows-latest
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Build and scan image
+#       uses: ISID/build-and-scan-image@main
+#       with:
+#         tag: "WINDOWS:aspnet"  # Image name and optionally tag in "name:tag" format
+# #         path: "."  # Path to base directory to run `docker build` command
+
+# jobs:
+#   on:
+#     push:
+#       build-and-publish-head:
+#         runs-on: Windows-latest
+#         if: github.ref == 'refs/heads/develop' # Running this job only for develop branch
+
+#         steps:
+#         - uses: actions/checkout@v2 # Checking out the repo
+
+#         - name: Build and Publish head Docker image
+#           uses: VaultVulp/gp-docker-action@1.0.1
+#           with:
+#             github-token: ${{ secrets.GITHUB_TOKEN }} # Provide GITHUB_TOKEN to login into the GitHub Packages
+#             image-name: my-cool-service # Provide Docker image name
+#             image-tag: head # Provide Docker image tag
+            
+            
+            
+            
+on: push
+name: 🚀 Deploy website on push
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: windows-2019
+    steps:
+
+#     - uses: actions/checkout@v2 # Checking out the repo
+
+#     - name: Build and Publish head Docker image
+#       uses: VaultVulp/gp-docker-action@1.0.1
+#       with:
+#         github-token: ${{ secrets.GITHUB_TOKEN }} # Provide GITHUB_TOKEN to login into the GitHub Packages
+#         image-name: aspnet # Provide Docker image name
+#         image-tag: head # Provide Docker image tag
+        
+      
+#     - name: Checkout
+#       uses: actions/checkout@v3
+#       with:
+#         fetch-depth: 0
+#     - name: Test_Run
+#       uses: philips-software/run-windows-docker-container-action@v1.0.1
+#       with:
+# #         image: mcr.microsoft.com/windows/servercore:20H2
+# #         image: mcr.microsoft.com/powershell:nanoserver-2004
+#         image: mcr.microsoft.com/windows/servercore:1809
+#         entrypoint: powershell.exe
+#         run: >-
+#           echo "Hello world";
+#           Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/microsoft/Windows-Containers/Main/helpful_tools/Install-ContainerdRuntime/install-containerd-runtime.ps1" -o install-containerd-runtime.ps1
+#           .\\install-containerd-runtime.ps1
+#           Invoke-restmethod -Uri https://raw.githubusercontent.com/Rizal-I/pod-templates/master/Dockerfile > Dockerfile
+#           nerdctl build -t .
+
+#     - name: Run PS
+#       uses: Amadevus/pwsh-script@v2
+#       id: my-script
+#       continue-on-error: true
+#       with:
+#         script: |
+#           Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/microsoft/Windows-Containers/Main/helpful_tools/Install-ContainerdRuntime/install-containerd-runtime.ps1" -o install-containerd-runtime.ps1;
+#           .\\install-containerd-runtime.ps1;
+#           Invoke-restmethod -Uri https://raw.githubusercontent.com/Rizal-I/pod-templates/master/Dockerfile > Dockerfile;
+#           docker build -t aspnet .;
+#           docker images;
+#     - run: echo "${{ steps.my-script.outputs.result }}"
+    
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Test_Run
+      uses: philips-software/run-windows-docker-container-action@v1.0.1
+      with:
+        image: mcr.microsoft.com/windows/servercore:10.0.14393.5427-amd64
+        entrypoint: powershell.exe
+        run: >-
+          echo "Hello world";
+          ./run-test-script.ps1;
+          Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/microsoft/Windows-Containers/Main/helpful_tools/Install-ContainerdRuntime/install-containerd-runtime.ps1" -o install-containerd-runtime.ps1;
+          .\\install-containerd-runtime.ps1;
+          Invoke-restmethod -Uri https://raw.githubusercontent.com/Rizal-I/pod-templates/master/Dockerfile > Dockerfile
+          docker build -t aspnet .
+          docker images
